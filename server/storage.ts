@@ -1,37 +1,47 @@
-import { type User, type InsertUser } from "@shared/schema";
-import { randomUUID } from "crypto";
-
-// modify the interface with any CRUD methods
-// you might need
+import { type Submission, type InsertSubmission } from "@shared/schema";
 
 export interface IStorage {
-  getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
+  createSubmission(submission: InsertSubmission): Promise<Submission>;
+  getSubmission(id: number): Promise<Submission | undefined>;
+  updateSubmission(id: number, updates: Partial<Submission>): Promise<Submission>;
 }
 
 export class MemStorage implements IStorage {
-  private users: Map<string, User>;
+  private submissions: Map<number, Submission>;
+  private currentId: number;
 
   constructor() {
-    this.users = new Map();
+    this.submissions = new Map();
+    this.currentId = 1;
   }
 
-  async getUser(id: string): Promise<User | undefined> {
-    return this.users.get(id);
+  async createSubmission(insertSubmission: InsertSubmission): Promise<Submission> {
+    const id = this.currentId++;
+    const submission: Submission = {
+      ...insertSubmission,
+      id,
+      status: "pending",
+      riskLevel: null,
+      results: null,
+      fileName: null,
+      createdAt: new Date(),
+    };
+    this.submissions.set(id, submission);
+    return submission;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+  async getSubmission(id: number): Promise<Submission | undefined> {
+    return this.submissions.get(id);
   }
 
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const id = randomUUID();
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
-    return user;
+  async updateSubmission(id: number, updates: Partial<Submission>): Promise<Submission> {
+    const existing = this.submissions.get(id);
+    if (!existing) {
+      throw new Error(`Submission ${id} not found`);
+    }
+    const updated = { ...existing, ...updates };
+    this.submissions.set(id, updated);
+    return updated;
   }
 }
 
