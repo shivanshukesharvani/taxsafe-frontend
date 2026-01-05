@@ -1,0 +1,115 @@
+You are a Senior Frontend Engineer + UX Designer. Update the EXISTING React frontend to make it a production-polished, INTERACTIVE, USER-FRIENDLY, LIGHT 3D WEB APP with smooth 3D-style animations and professional color system. This is for a fintech/hackathon startup product (Tax Filing Mistake Checker). Preserve all current pages and flow (Landing → Question Wizard → Upload → Processing → Result). DO NOT add backend logic or new features—only UI/UX, styling, microinteractions, and motion.
+
+========================
+MISSION (short)
+========================
+Make the app look & feel like a trustworthy fintech startup:
+- Clean modern layout
+- Professional color palette
+- Subtle 3D depth for components
+- Smooth, performant animations
+- Best-in-class CTAs & microcopy for conversions
+- Mobile first + accessible
+
+========================
+DESIGN SYSTEM (exact)
+========================
+Use these tokens (HEX):
+- Primary (Deep Navy): #0B2545
+- Accent (Soft Blue): #1E90FF
+- Accent-2 (Indigo): #3B82F6
+- Background: #F6F8FA
+- Surface / Card: #FFFFFF
+- Muted text: #65708A
+- Success (Green): #1FA463
+- Warning (Yellow): #F2C94C
+- Danger (Red): #E74C3C
+
+Typography & spacing:
+- Font stack: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial"
+- Base font-size 16px, generous line-height
+- Use consistent spacing scale (8/16/24/32)
+
+========================
+3D & MOTION RULES (safe, subtle)
+========================
+- Use CSS 3D transforms + Framer Motion for transitions.
+- Card hover: transform: translateY(-8px) scale(1.01) rotateX(1.5deg); box-shadow: 0 20px 40px rgba(11,37,69,0.08)
+- Container perspective: 1000px
+- Animation durations: 200–350ms; easing: cubic-bezier(.2,.9,.3,1)
+- Use will-change: transform for animated elements
+- Respect prefers-reduced-motion: provide reduced/none animations
+- NO heavy 3D libs (Three.js only allowed if tiny, but prefer CSS+Framer)
+
+========================
+INTERACTIVITY REQUIREMENTS
+========================
+- Smooth page/step transitions (AnimatePresence / Framer Motion)
+- Buttons: hover lift, active press (scale .98), focus visible outline
+- Progress bar: animated width with ease
+- File upload: drag-and-drop with hover glow and microbounce on drop
+- Processing screen: sequential status lines that fade in; accessible aria-live updates
+- Result page: risk badge with entrance scale + glow; issue cards expand/collapse with height animation
+
+========================
+BEST CTA & MICROCOPY (use exactly or adapt)
+========================
+Primary CTA (Landing & top of wizard):
+- Text: **“Check My Filing — 2 min”**
+- Style: Primary deep navy background with subtle gradient overlay using Accent Blue; white text; rounded 10px; drop shadow; hover lift
+- Rationale: Communicates speed + action.
+
+Secondary CTA (less prominent):
+- Text: **“See Example Report”**
+- Style: outlined with Accent Blue border, hover fill
+
+Microcopy guidelines:
+- Keep it plain language (no tax jargon)
+- Examples:
+  - Hero subtext: “Find common filing mistakes in minutes — avoid notices and delays.”
+  - Upload hint: “Optional — upload salary slip or Form 26AS to improve accuracy.”
+  - Processing lines: “Analyzing your answers…”, “Checking for common mismatches…”
+
+========================
+PAGE SPECIFICS (how to update existing screens)
+========================
+Landing:
+- Add subtle abstract SVG background shape (low opacity)
+- CTA with badge showing average time (2 min)
+- Add small trust row (e.g., “Used by students & professionals”)
+
+Question Wizard:
+- Card centered with depth; one question per screen
+- Animated step transitions with progress indicator
+- Next disabled until answer chosen
+
+Upload:
+- Drag zone with animated outline & subtle 3D lift on hover
+- Show filename pill with small trash remove icon + microanimation on remove
+
+Processing:
+- Centered animated loader with step text; use aria-live=polite
+- Auto-transition to result after simulated delay (2–3s) for demo
+
+Result:
+- Prominent 3D RiskBadge (Green/Yellow/Red) — animate on mount
+- Issue cards stacked with small z-index lift; expand for details
+- Primary CTA to “Download Report (PDF)” placeholder (non-functional) styled as primary CTA
+
+========================
+ACCESSIBILITY & PERFORMANCE
+========================
+- High contrast ratios (WCAG AA)
+- Keyboard operable: tab order, enter/space activation
+- aria-labels for interactive controls, aria-live for processing
+- Lazy-load images & SVGs
+- Keep bundle small; prefer CSS transforms to layout thrashing
+
+========================
+DEV RULES (what agent should output)
+========================
+- Update existing components — do not rewrite app structure
+- Use CSS Modules or scoped CSS files (component.module.css)
+- Use Framer Motion for animations (or CSS if Framer not available)
+- Add CSS variables for color tokens
+- Add small /src/design-tokens.css or variables.css with the tokens above..
