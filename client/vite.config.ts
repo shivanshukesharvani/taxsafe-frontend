@@ -6,9 +6,9 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src"),
-      "@shared": path.resolve(__dirname, "../shared"),
-      "zod": path.resolve(__dirname, "node_modules", "zod"),
+      "@": path.resolve(process.cwd(), "src"),
+      "@shared": path.resolve(process.cwd(), "../shared"),
+      "zod": path.resolve(process.cwd(), "node_modules", "zod"),
     },
   },
   build: {
