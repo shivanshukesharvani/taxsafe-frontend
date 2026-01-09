@@ -1,54 +1,20 @@
-import { z } from 'zod';
-import { insertSubmissionSchema, submissions } from './schema';
-
-export const errorSchemas = {
-  validation: z.object({
-    message: z.string(),
-    field: z.string().optional(),
-  }),
-  notFound: z.object({
-    message: z.string(),
-  }),
-  internal: z.object({
-    message: z.string(),
-  }),
-};
-
 export const api = {
   submissions: {
     create: {
       method: 'POST' as const,
       path: '/api/submissions',
-      input: insertSubmissionSchema,
-      responses: {
-        201: z.custom<typeof submissions.$inferSelect>(),
-        400: errorSchemas.validation,
-      },
     },
     get: {
       method: 'GET' as const,
       path: '/api/submissions/:id',
-      responses: {
-        200: z.custom<typeof submissions.$inferSelect>(),
-        404: errorSchemas.notFound,
-      },
     },
     uploadFile: {
       method: 'POST' as const,
       path: '/api/submissions/:id/upload',
-      input: z.object({ fileName: z.string() }), // Mock upload
-      responses: {
-        200: z.custom<typeof submissions.$inferSelect>(),
-        404: errorSchemas.notFound,
-      },
     },
     process: {
       method: 'POST' as const,
       path: '/api/submissions/:id/process',
-      responses: {
-        200: z.custom<typeof submissions.$inferSelect>(),
-        404: errorSchemas.notFound,
-      },
     }
   },
 };

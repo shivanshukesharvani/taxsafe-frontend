@@ -8,7 +8,10 @@ export default defineConfig({
     alias: {
       "@": path.resolve(process.cwd(), "src"),
       "@shared": path.resolve(process.cwd(), "../shared"),
-      "zod": path.resolve(process.cwd(), "node_modules", "zod"),
+      // Block backend-only modules from being bundled
+      "drizzle-orm": "false",
+      "drizzle-orm/pg-core": "false",
+      "shared/schema": "false",
     },
   },
   build: {
