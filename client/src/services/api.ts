@@ -1,5 +1,31 @@
-// Read API URL from Vite environment
-const API_URL = import.meta.env.VITE_API_URL as string | undefined;
+// Define global window interface for runtime config
+declare global {
+  interface Window {
+    RUNTIME_CONFIG?: {
+      API_URL?: string;
+    };
+  }
+}
+
+// 🔧 API CONFIGURATION
+// Handles missing env vars by falling back to relative paths or defaults
+const getBaseUrl = (): string => {
+  // 1. Runtime Config (Window Injection) - Safe for Azure SWA
+  if (typeof window !== "undefined" && window.RUNTIME_CONFIG?.API_URL) {
+    return window.RUNTIME_CONFIG.API_URL;
+  }
+
+  // 2. Local Development Fallback
+  if (import.meta.env.DEV) {
+    return "http://localhost:3000";
+  }
+
+  // 3. Production Fallback (Hardcoded)
+  // Direct link to Azure App Service backend ensures Wizard works without env vars
+  return "https://taxsafe-breub7gvavf3fhaa.centralindia-01.azurewebsites.net";
+};
+
+const API_URL = getBaseUrl();
 
 export interface AnalyzeResponse {
   success: boolean;
@@ -13,17 +39,11 @@ export interface AnalyzeResponse {
  * - Handles network / HTTP / JSON errors gracefully
  */
 export async function analyzeTest(): Promise<AnalyzeResponse> {
-  // ✅ ENV SAFETY (NO THROW)
-  if (!API_URL) {
-    console.error("❌ VITE_API_URL is not defined");
-    return {
-      success: false,
-      message: "Backend API is not configured",
-    };
-  }
+  // Ensure no double slash if API_URL ends with /
+  const baseUrl = API_URL.replace(/\/$/, "");
 
   try {
-    const response = await fetch(`${API_URL}/api/analyze`, {
+    const response = await fetch(`${baseUrl}/api/analyze`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
