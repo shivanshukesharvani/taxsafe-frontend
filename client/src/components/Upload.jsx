@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { API_URL } from "../services/api";
+import { useNavigate } from "react-router-dom";
+import { uploadSalarySlip } from "../services/api";
 
 export default function Upload() {
   const [file, setFile] = useState(null);
-  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   async function handleUpload() {
     if (!file) {
@@ -12,21 +13,16 @@ export default function Upload() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file); // 🔑 must be 'file'
-
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_URL}/api/analyze`, {
-        method: "POST",
-        body: formData,
-      });
+      // Use safe mock service
+      const res = await uploadSalarySlip(123, file);
 
-      const data = await res.json();
-      setResult(data);
+      if (res.success) {
+        navigate("/report");
+      }
     } catch (err) {
-      alert("Upload failed");
       console.error(err);
     } finally {
       setLoading(false);
@@ -47,12 +43,6 @@ export default function Upload() {
       <button onClick={handleUpload}>
         {loading ? "Analyzing..." : "Upload & Analyze"}
       </button>
-
-      {result && (
-        <pre style={{ marginTop: 20 }}>
-          {JSON.stringify(result, null, 2)}
-        </pre>
-      )}
     </div>
   );
 }
