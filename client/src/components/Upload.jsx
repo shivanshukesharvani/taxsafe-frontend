@@ -1,6 +1,5 @@
 import { useState } from "react";
-
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+import { API_URL } from "../services/api";
 
 export default function Upload() {
   const [file, setFile] = useState(null);
@@ -19,7 +18,7 @@ export default function Upload() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/analyze`, {
+      const res = await fetch(`${API_URL}/api/analyze`, {
         method: "POST",
         body: formData,
       });
